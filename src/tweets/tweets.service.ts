@@ -9,20 +9,23 @@ export class TweetsService {
 
   private tweets: Tweet[] = [];
 
-  getLast15Tweets(): Tweet[] {
-    const last15Tweets = this.tweets.slice(-15)
-    return last15Tweets
+  private readonly TWEETS_PER_PAGE = 15;
+
+  getPaginatedTweets(page: number = 1): Tweet[] {
+    const startIndex = (page - 1) * this.TWEETS_PER_PAGE;
+    const endIndex = startIndex + this.TWEETS_PER_PAGE;
+    return this.tweets.slice(startIndex, endIndex);
   }
 
   createTweet(body: createTweetDto) {
     const existingUser = this.appService.findUserByUsername(body.username);
 
     if (!existingUser) {
-        throw new UnauthorizedException('User not authorized');
+      throw new UnauthorizedException('User not authorized');
     }
 
     const newTweet = new Tweet(existingUser, body.tweet);
-    this.tweets.push(newTweet);
+    this.tweets.unshift(newTweet);
     return newTweet;
   }
 }
