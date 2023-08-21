@@ -1,14 +1,10 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { AppService } from './app.service';
-import { createUserDto } from './dtos/user.dto';
+import {  Controller, Get} from '@nestjs/common';
 
-@Controller('sign-up')
+@Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
 
-  @Post()
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }))
-  createUser(@Body() body: createUserDto) {
-    return this.appService.createUser(body)
+  @Get()
+  appHealth(){
+    return ("I'm okay!")
   }
 }

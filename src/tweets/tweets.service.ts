@@ -1,30 +1,40 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AppService } from '../app.service';
 import { createTweetDto } from '../dtos/tweet.dto';
 import { Tweet } from '../entities/tweet.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TweetsService {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   private tweets: Tweet[] = [];
 
   private readonly TWEETS_PER_PAGE = 15;
 
-  getPaginatedTweets(page: number = 1): Tweet[] {
+  getPaginatedTweets(page: number = 1) {
     const startIndex = (page - 1) * this.TWEETS_PER_PAGE;
     const endIndex = startIndex + this.TWEETS_PER_PAGE;
-    return this.tweets.slice(startIndex, endIndex);
+    const paginatedTweets = this.tweets.slice(startIndex, endIndex);
+
+    return paginatedTweets.map(tweet => ({
+      username: tweet.user.username,
+      avatar: tweet.user.avatar,
+      tweet: tweet.tweet
+    }));
   }
 
   getUserTweets(username: string){
     const userTweets = this.tweets.filter((element) => element.user.username.toLowerCase() === username.toLowerCase() )
 
-    return userTweets
+    return userTweets.map(tweet => ({
+      username: tweet.user.username,
+      avatar: tweet.user.avatar,
+      tweet: tweet.tweet
+    }));
   }
 
   createTweet(body: createTweetDto) {
-    const existingUser = this.appService.findUserByUsername(body.username);
+    const existingUser = this.usersService.findUserByUsername(body.username);
 
     if (!existingUser) {
       throw new UnauthorizedException('User not authorized');
