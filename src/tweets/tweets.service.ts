@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AppService } from 'src/app.service';
 import { createTweetDto } from 'src/dtos/tweet.dto';
 import { Tweet } from 'src/entities/tweet.entity';
@@ -17,7 +17,7 @@ export class TweetsService {
     const existingUser = this.appService.findUserByUsername(body.username);
 
     if (!existingUser) {
-      throw new NotFoundException('User not found');
+        throw new UnauthorizedException('User not authorized');
     }
 
     const newTweet = new Tweet(existingUser, body.tweet);
