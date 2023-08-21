@@ -9,8 +9,9 @@ export class TweetsService {
 
   private tweets: Tweet[] = [];
 
-  getAllTweets(): Tweet[] {
-    return this.tweets;
+  getLast15Tweets(): Tweet[] {
+    const last15Tweets = this.tweets.slice(-15)
+    return last15Tweets
   }
 
   createTweet(body: createTweetDto) {

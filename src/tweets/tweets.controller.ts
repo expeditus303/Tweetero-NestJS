@@ -7,8 +7,8 @@ export class TweetsController {
     constructor(private readonly tweetService: TweetsService) {}
 
     @Get()
-    getAllTweets() {
-        return this.tweetService.getAllTweets()
+    getLast15Tweets() {
+        return this.tweetService.getLast15Tweets()
     }
 
     @Post()
