@@ -3,13 +3,14 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { createTweetDto } from 'src/dtos/tweet.dto';
 import { TweetsService } from './tweets.service';
+import { createTweetDto } from '../dtos/tweet.dto';
 
 @Controller('tweets')
 export class TweetsController {
@@ -28,6 +29,11 @@ export class TweetsController {
     }
 
     return this.tweetsService.getPaginatedTweets(currentPage);
+  }
+
+  @Get(':username')
+  getUserTweets(@Param('username') username: string){
+    return this.tweetsService.getUserTweets(username)
   }
 
   @Post()
